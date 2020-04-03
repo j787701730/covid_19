@@ -1,5 +1,8 @@
 import 'package:covid19/pages/data.dart';
 import 'package:covid19/pages/home.dart';
+import 'package:covid19/pages/recommend_list.dart';
+import 'package:covid19/pages/rumor_list.dart';
+import 'package:covid19/pages/wiki_list.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -13,20 +16,40 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _tabIndex = 0;
+  PageController _pageController;
   List pages = [
     Home(),
     Data(),
-    Home(),
-    Home(),
-    Home(),
+    RumorList(),
+    RecommendList(),
+    WikiList(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[_tabIndex],
+      body: PageView.builder(
+          //要点1
+          physics: NeverScrollableScrollPhysics(), //禁止页面左右滑动切换
+          controller: _pageController,
+//          onPageChanged: _pageChanged,//回调函数
+          itemCount: pages.length,
+          itemBuilder: (context, index) => pages[index]),
       bottomNavigationBar: BottomNavigationBar(
-        elevation: 1,
+//        elevation: 1,
+        selectedFontSize: 12,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -54,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: (val) {
           setState(() {
             _tabIndex = val;
+            _pageController.jumpToPage(val);
           });
         },
       ),

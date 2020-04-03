@@ -145,7 +145,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                       )
                     //
                     : Container(
-                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
@@ -154,9 +154,17 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text('全国统计'),
+                                  Text(
+                                    '全国统计',
+                                    style: TextStyle(
+                                      fontSize: FontSize.title,
+                                    ),
+                                  ),
                                   Text(
                                     '${DateTime.fromMillisecondsSinceEpoch(logs['modifyTime']).toString().substring(0, 19)}',
+                                    style: TextStyle(
+                                      fontSize: FontSize.title,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -361,6 +369,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
       ),
       floatingActionButton: CFFloatingActionButton(
         onPressed: toTop,
+        heroTag: 'data',
         child: Icon(Icons.keyboard_arrow_up),
       ),
     );

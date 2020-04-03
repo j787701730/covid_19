@@ -8,17 +8,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class Home extends StatefulWidget {
+class RecommendList extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _RecommendListState createState() => _RecommendListState();
 }
 
-class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
+class _RecommendListState extends State<RecommendList> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   List logs = [];
-  int count = 0;
   BuildContext _context;
   ScrollController _controller;
   bool loading = true;
@@ -48,9 +47,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     super.initState();
     _controller = ScrollController();
     _context = context;
-//    Timer(Duration(milliseconds: 200), () {
-    getData();
-//    });
+    Timer(Duration(milliseconds: 200), () {
+      getData();
+    });
   }
 
   @override
@@ -60,7 +59,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   getData({isRefresh: false}) async {
-    ajaxSimple('data/getTimelineService', {}, (res) {
+    ajaxSimple('data/getIndexRecommendList', {}, (res) {
       if (mounted) {
         setState(() {
           logs = res ?? [];
@@ -82,6 +81,23 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     );
   }
 
+  numText(num) {
+    Color color;
+    if (num == 0) {
+      color = Colors.grey;
+    } else if (num > 0) {
+      color = Colors.red;
+    } else {
+      color = Colors.green;
+    }
+    return Text(
+      '${num > 0 ? '+$num' : num}',
+      style: TextStyle(
+        color: color,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -90,7 +106,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('新闻'),
+        title: Text('防护知识'),
+        actions: <Widget>[Container()],
       ),
       backgroundColor: Color(0xffF7F7F7),
       body: SmartRefresher(
@@ -134,24 +151,23 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: logs.map<Widget>((item) {
                             return GestureDetector(
-                              behavior: HitTestBehavior.opaque,
                               onTap: () {
                                 Navigator.push(
                                   _context,
                                   MaterialPageRoute(
-                                    builder: (context) => NewDetail(props: item,index: 'sourceUrl',),
+                                    builder: (context) => NewDetail(
+                                      props: item,
+                                      index: 'linkUrl',
+                                    ),
                                   ),
                                 );
                               },
+                              behavior: HitTestBehavior.opaque,
                               child: Container(
                                 margin: EdgeInsets.only(bottom: 16),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-//                                border: Border.all(
-//                                  color: Color(0xffdddddd),
-//                                  width: 0.5,
-//                                ),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(2),
                                   ),
@@ -168,30 +184,33 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      '${item['summary']}',
-                                      style: TextStyle(
-                                        fontSize: FontSize.content,
-                                        color: CColors.gray,
-                                      ),
-                                    ),
+                                    Image.network('${item['imgUrl']}'),
                                     Container(
                                       padding: EdgeInsets.symmetric(vertical: 10),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
-                                          Text(
-                                            '时间：${item['pubDateStr']}',
-                                            style: TextStyle(
-                                              fontSize: FontSize.content,
-                                              color: CColors.gray,
+                                          Expanded(
+                                            child: Text(
+                                              '${item['operator']}',
+                                              style: TextStyle(
+                                                fontSize: FontSize.content,
+                                                color: CColors.gray,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
-                                          Text(
-                                            '来源：${item['infoSource']}',
-                                            style: TextStyle(
-                                              fontSize: FontSize.content,
-                                              color: CColors.gray,
+                                          Expanded(
+                                            child: Text(
+                                              '${DateTime.fromMillisecondsSinceEpoch(item['modifyTime']).toString().substring(0, 19)}',
+                                              style: TextStyle(
+                                                fontSize: FontSize.content,
+                                                color: CColors.gray,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.right,
                                             ),
                                           ),
                                         ],
@@ -209,7 +228,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       ),
       floatingActionButton: CFFloatingActionButton(
         onPressed: toTop,
-        heroTag: 'home',
+        heroTag: 'recommend',
         child: Icon(Icons.keyboard_arrow_up),
       ),
     );

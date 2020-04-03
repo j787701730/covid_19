@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:covid19/pages/new_detail.dart';
 import 'package:covid19/primary_button.dart';
 import 'package:covid19/style.dart';
 import 'package:covid19/utils.dart';
@@ -8,17 +7,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class Home extends StatefulWidget {
+class RumorList extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _RumorListState createState() => _RumorListState();
 }
 
-class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
+class _RumorListState extends State<RumorList> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   List logs = [];
-  int count = 0;
   BuildContext _context;
   ScrollController _controller;
   bool loading = true;
@@ -48,9 +46,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     super.initState();
     _controller = ScrollController();
     _context = context;
-//    Timer(Duration(milliseconds: 200), () {
-    getData();
-//    });
+    Timer(Duration(milliseconds: 200), () {
+      getData();
+    });
   }
 
   @override
@@ -60,7 +58,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   getData({isRefresh: false}) async {
-    ajaxSimple('data/getTimelineService', {}, (res) {
+    ajaxSimple('data/getIndexRumorList', {}, (res) {
       if (mounted) {
         setState(() {
           logs = res ?? [];
@@ -82,6 +80,23 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     );
   }
 
+  numText(num) {
+    Color color;
+    if (num == 0) {
+      color = Colors.grey;
+    } else if (num > 0) {
+      color = Colors.red;
+    } else {
+      color = Colors.green;
+    }
+    return Text(
+      '${num > 0 ? '+$num' : num}',
+      style: TextStyle(
+        color: color,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -90,7 +105,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('新闻'),
+        title: Text('辟谣'),
+        actions: <Widget>[Container()],
       ),
       backgroundColor: Color(0xffF7F7F7),
       body: SmartRefresher(
@@ -133,72 +149,81 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: logs.map<Widget>((item) {
-                            return GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                Navigator.push(
-                                  _context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NewDetail(props: item,index: 'sourceUrl',),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(bottom: 16),
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-//                                border: Border.all(
-//                                  color: Color(0xffdddddd),
-//                                  width: 0.5,
-//                                ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(2),
-                                  ),
+                            return Container(
+                              margin: EdgeInsets.only(bottom: 16),
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(2),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      padding: EdgeInsets.symmetric(vertical: 10),
-                                      child: Text(
-                                        '${item['title']}',
-                                        style: TextStyle(
-                                          fontSize: FontSize.title,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      '${item['summary']}',
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Text(
+                                      '${item['title']}',
                                       style: TextStyle(
-                                        fontSize: FontSize.content,
-                                        color: CColors.gray,
+                                        fontSize: FontSize.title,
                                       ),
                                     ),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(vertical: 10),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(
-                                            '时间：${item['pubDateStr']}',
+                                  ),
+                                  item['summary'] == ''
+                                      ? Container()
+                                      : Container(
+                                          padding: EdgeInsets.symmetric(vertical: 6),
+                                          child: Text(
+                                            '${item['summary']}',
                                             style: TextStyle(
-                                              fontSize: FontSize.content,
+                                              fontSize: FontSize.tabBar,
                                               color: CColors.gray,
                                             ),
                                           ),
-                                          Text(
-                                            '来源：${item['infoSource']}',
+                                        ),
+                                  item['mainSummary'] == ''
+                                      ? Container()
+                                      : Container(
+                                          padding: EdgeInsets.symmetric(vertical: 6),
+                                          child: Text(
+                                            '${item['mainSummary']}',
                                             style: TextStyle(
-                                              fontSize: FontSize.content,
+                                              fontSize: FontSize.tabBar,
                                               color: CColors.gray,
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                        ),
+                                  Text(
+                                    '${item['body']}',
+                                    style: TextStyle(
+                                      fontSize: FontSize.content,
+                                      color: CColors.gray,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          ' ',
+                                          style: TextStyle(
+                                            fontSize: FontSize.content,
+                                            color: CColors.gray,
+                                          ),
+                                        ),
+                                        Text(
+                                          '评分：${item['score']}',
+                                          style: TextStyle(
+                                            fontSize: FontSize.content,
+                                            color: CColors.gray,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
                             );
                           }).toList(),
@@ -209,7 +234,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       ),
       floatingActionButton: CFFloatingActionButton(
         onPressed: toTop,
-        heroTag: 'home',
         child: Icon(Icons.keyboard_arrow_up),
       ),
     );
