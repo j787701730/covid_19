@@ -178,6 +178,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                                           '${logs['confirmedCount']}',
                                           style: TextStyle(
                                             color: Colors.red,
+                                            fontSize: FontSize.title,
                                           ),
                                         ),
                                         Text('累计确诊'),
@@ -198,6 +199,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                                           '${logs['currentConfirmedCount']}',
                                           style: TextStyle(
                                             color: Colors.red,
+                                            fontSize: FontSize.title,
                                           ),
                                         ),
                                         Text('当前确诊'),
@@ -218,6 +220,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                                           '${logs['suspectedCount']}',
                                           style: TextStyle(
                                             color: Colors.yellow,
+                                            fontSize: FontSize.title,
                                           ),
                                         ),
                                         Text('疑似'),
@@ -245,6 +248,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                                           '${logs['deadCount']}',
                                           style: TextStyle(
                                             color: Colors.grey,
+                                            fontSize: FontSize.title,
                                           ),
                                         ),
                                         Text('死亡人数'),
@@ -265,6 +269,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                                           '${logs['seriousCount']}',
                                           style: TextStyle(
                                             color: Colors.red,
+                                            fontSize: FontSize.title,
                                           ),
                                         ),
                                         Text('重症'),
@@ -285,6 +290,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                                           '${logs['curedCount']}',
                                           style: TextStyle(
                                             color: Colors.green,
+                                            fontSize: FontSize.title,
                                           ),
                                         ),
                                         Text('治愈'),
