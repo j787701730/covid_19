@@ -92,7 +92,7 @@ class _WikiListState extends State<WikiList> with AutomaticKeepAliveClientMixin 
       color = Colors.green;
     }
     return Text(
-      '${num > 0 ? '+$num' : num}',
+      '${num >= 0 ? '+$num' : num}',
       style: TextStyle(
         color: color,
       ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:covid19/pages/guo_wai_data.dart';
 import 'package:covid19/primary_button.dart';
 import 'package:covid19/style.dart';
 import 'package:covid19/utils.dart';
@@ -90,7 +91,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
       color = Colors.green;
     }
     return Text(
-      '${num > 0 ? '+$num' : num}',
+      '${num >= 0 ? '+$num' : num}',
       style: TextStyle(
         color: color,
       ),
@@ -250,6 +251,23 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                                         logs['globalStatistics']['deadCount'], '累计死亡'),
                                   ),
                                 ],
+                              ),
+                            ),
+                            Container(
+                              color: Color(0xfff5f5f5),
+                              padding: EdgeInsets.only(
+                                bottom: 25,
+                              ),
+                              child: PrimaryButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    _context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GuoWaiData(),
+                                    ),
+                                  );
+                                },
+                                child: Text('全球国家具体数据'),
                               ),
                             ),
                             Container(

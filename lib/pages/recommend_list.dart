@@ -91,7 +91,7 @@ class _RecommendListState extends State<RecommendList> with AutomaticKeepAliveCl
       color = Colors.green;
     }
     return Text(
-      '${num > 0 ? '+$num' : num}',
+      '${num >= 0 ? '+$num' : num}',
       style: TextStyle(
         color: color,
       ),

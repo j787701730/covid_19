@@ -90,7 +90,7 @@ class _RumorListState extends State<RumorList> with AutomaticKeepAliveClientMixi
       color = Colors.green;
     }
     return Text(
-      '${num > 0 ? '+$num' : num}',
+      '${num >= 0 ? '+$num' : num}',
       style: TextStyle(
         color: color,
       ),
