@@ -97,6 +97,52 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
     );
   }
 
+  numCard(incr, count, name) {
+    Color color;
+    if (name == '累计治愈') {
+      color = Colors.green;
+    } else if (name == '累计死亡') {
+      color = Colors.grey;
+    } else if (name == '累计疑似') {
+      color = Colors.amber;
+    } else {
+      color = Colors.red;
+    }
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(4),
+        ),
+      ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('较上日'),
+              numText(incr),
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.all(4),
+            child: Text(
+              '$count',
+              style: TextStyle(
+                color: color,
+                fontSize: FontSize.topTitle,
+              ),
+            ),
+          ),
+          Text(name),
+        ],
+      ),
+    );
+  }
+
+  int type = 1; // 1 国内, 2 国外
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -105,7 +151,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('统计信息'),
+        title: Text('数据'),
         actions: <Widget>[Container()],
       ),
       backgroundColor: Color(0xffF7F7F7),
@@ -145,221 +191,331 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
                       )
                     //
                     : Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Container(
+                              padding: EdgeInsets.all(8),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '全球疫情统计',
+                                style: TextStyle(
+                                  fontSize: FontSize.title,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                '更新时间：${DateTime.fromMillisecondsSinceEpoch(logs['modifyTime']).toString().substring(0, 19)}',
+                                style: TextStyle(
+                                  fontSize: FontSize.title,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
                               margin: EdgeInsets.only(bottom: 10),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text(
-                                    '全国统计',
-                                    style: TextStyle(
-                                      fontSize: FontSize.title,
-                                    ),
+                                  Expanded(
+                                    child: numCard(logs['globalStatistics']['confirmedIncr'],
+                                        logs['globalStatistics']['confirmedCount'], '累计确诊'),
                                   ),
-                                  Text(
-                                    '${DateTime.fromMillisecondsSinceEpoch(logs['modifyTime']).toString().substring(0, 19)}',
-                                    style: TextStyle(
-                                      fontSize: FontSize.title,
-                                    ),
+                                  Container(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: numCard(logs['globalStatistics']['currentConfirmedIncr'],
+                                        logs['globalStatistics']['currentConfirmedCount'], '当前确诊'),
                                   ),
                                 ],
                               ),
                             ),
                             Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              margin: EdgeInsets.only(bottom: 16),
                               child: Row(
                                 children: <Widget>[
                                   Expanded(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text('较上日 '),
-                                            numText(logs['confirmedIncr']),
-                                          ],
-                                        ),
-                                        Text(
-                                          '${logs['confirmedCount']}',
-                                          style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: FontSize.title,
-                                          ),
-                                        ),
-                                        Text('累计确诊'),
-                                      ],
-                                    ),
+                                    child: numCard(logs['globalStatistics']['curedIncr'],
+                                        logs['globalStatistics']['curedCount'], '累计治愈'),
+                                  ),
+                                  Container(
+                                    width: 10,
                                   ),
                                   Expanded(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text('较上日 '),
-                                            numText(logs['currentConfirmedIncr']),
-                                          ],
-                                        ),
-                                        Text(
-                                          '${logs['currentConfirmedCount']}',
-                                          style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: FontSize.title,
-                                          ),
-                                        ),
-                                        Text('当前确诊'),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text('较上日 '),
-                                            numText(logs['suspectedIncr']),
-                                          ],
-                                        ),
-                                        Text(
-                                          '${logs['suspectedCount']}',
-                                          style: TextStyle(
-                                            color: Colors.yellow,
-                                            fontSize: FontSize.title,
-                                          ),
-                                        ),
-                                        Text('疑似'),
-                                      ],
-                                    ),
+                                    child: numCard(logs['globalStatistics']['deadIncr'],
+                                        logs['globalStatistics']['deadCount'], '累计死亡'),
                                   ),
                                 ],
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(top: 15),
+                              padding: EdgeInsets.symmetric(horizontal: 16),
                               child: Row(
                                 children: <Widget>[
                                   Expanded(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text('较上日 '),
-                                            numText(logs['deadIncr']),
-                                          ],
-                                        ),
-                                        Text(
-                                          '${logs['deadCount']}',
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        padding: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                            color: type == 1 ? CColors.white : Color(0xfff5f5f5),
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                            )),
+                                        child: Text(
+                                          '国内疫情',
                                           style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: FontSize.title,
+                                            color: type == 1 ? CColors.primary : CColors.text,
                                           ),
                                         ),
-                                        Text('死亡人数'),
-                                      ],
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          type = 1;
+                                        });
+                                      },
                                     ),
                                   ),
                                   Expanded(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text('较上日 '),
-                                            numText(logs['seriousIncr']),
-                                          ],
-                                        ),
-                                        Text(
-                                          '${logs['seriousCount']}',
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: type == 2 ? CColors.white : Color(0xfff5f5f5),
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(6),
+                                            )),
+                                        alignment: Alignment.center,
+                                        padding: EdgeInsets.all(8),
+                                        child: Text(
+                                          '国外疫情',
                                           style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: FontSize.title,
+                                            color: type == 2 ? CColors.primary : CColors.text,
                                           ),
                                         ),
-                                        Text('重症'),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text('较上日 '),
-                                            numText(logs['curedIncr']),
-                                          ],
-                                        ),
-                                        Text(
-                                          '${logs['curedCount']}',
-                                          style: TextStyle(
-                                            color: Colors.green,
-                                            fontSize: FontSize.title,
-                                          ),
-                                        ),
-                                        Text('治愈'),
-                                      ],
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          type = 2;
+                                        });
+                                      },
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                bottom: 10,
-                                top: 15,
+                            Offstage(
+                              // 国内
+                              offstage: type != 1,
+                              child: Container(
+                                color: Colors.white,
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                margin: EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      color: Color(0xfff5f5f5),
+                                      padding: EdgeInsets.symmetric(vertical: 6),
+                                      child: Container(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: numCard(logs['confirmedIncr'], logs['confirmedCount'], '累计确诊'),
+                                            ),
+                                            Container(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              child: numCard(
+                                                  logs['currentConfirmedIncr'], logs['currentConfirmedCount'], '当前确诊'),
+                                            ),
+                                            Container(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              child: numCard(logs['suspectedIncr'], logs['suspectedCount'], '累计疑似'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Color(0xfff5f5f5),
+                                      padding: EdgeInsets.only(bottom: 10),
+                                      child: Container(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: numCard(logs['seriousIncr'], logs['seriousCount'], '累计重症'),
+                                            ),
+                                            Container(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              child: numCard(logs['curedIncr'], logs['curedCount'], '累计治愈'),
+                                            ),
+                                            Container(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              child: numCard(logs['deadIncr'], logs['deadCount'], '累计死亡'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Color(0xfff5f5f5),
+                                      margin: EdgeInsets.only(
+                                        bottom: 10,
+                                      ),
+                                      child: Image.network('${logs['imgUrl']}'),
+                                    ),
+                                    Column(
+                                      children: logs['dailyPics'].map<Widget>(
+                                        (item) {
+                                          return Container(
+                                            margin: EdgeInsets.only(bottom: 10),
+                                            child: Image.network('$item'),
+                                          );
+                                        },
+                                      ).toList(),
+                                    ),
+                                    Column(
+                                      children: logs['quanguoTrendChart'].map<Widget>(
+                                        (item) {
+                                          return Column(
+                                            children: <Widget>[
+                                              Container(
+                                                padding: EdgeInsets.symmetric(vertical: 10),
+                                                margin: EdgeInsets.only(top: 10),
+                                                child: Text('${item['title']}'),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(bottom: 10),
+                                                child: Image.network('${item['imgUrl']}'),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      ).toList(),
+                                    ),
+                                    Column(
+                                      children: logs['hbFeiHbTrendChart'].map<Widget>(
+                                        (item) {
+                                          return Column(
+                                            children: <Widget>[
+                                              Container(
+                                                padding: EdgeInsets.symmetric(vertical: 10),
+                                                margin: EdgeInsets.only(top: 10),
+                                                child: Text('${item['title']}'),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(bottom: 10),
+                                                child: Image.network('${item['imgUrl']}'),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      ).toList(),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Image.network('${logs['imgUrl']}'),
                             ),
-                            Column(
-                              children: logs['dailyPics'].map<Widget>(
-                                (item) {
-                                  return Container(
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    child: Image.network('$item'),
-                                  );
-                                },
-                              ).toList(),
-                            ),
-                            Column(
-                              children: logs['quanguoTrendChart'].map<Widget>(
-                                (item) {
-                                  return Column(
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.symmetric(vertical: 10),
-                                        child: Text('${item['title']}'),
+                            Offstage(
+                              // 国外
+                              offstage: type != 2,
+                              child: Container(
+                                color: Colors.white,
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                margin: EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      color: Color(0xfff5f5f5),
+                                      padding: EdgeInsets.symmetric(vertical: 6),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: numCard(logs['foreignStatistics']['confirmedIncr'],
+                                                logs['foreignStatistics']['confirmedCount'], '累计确诊'),
+                                          ),
+                                          Container(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            child: numCard(logs['foreignStatistics']['currentConfirmedIncr'],
+                                                logs['foreignStatistics']['currentConfirmedCount'], '当前确诊'),
+                                          ),
+                                        ],
                                       ),
-                                      Container(
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        child: Image.network('${item['imgUrl']}'),
-                                      )
-                                    ],
-                                  );
-                                },
-                              ).toList(),
-                            ),
-                            Column(
-                              children: logs['hbFeiHbTrendChart'].map<Widget>(
-                                (item) {
-                                  return Column(
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.symmetric(vertical: 10),
-                                        child: Text('${item['title']}'),
+                                    ),
+                                    Container(
+                                      color: Color(0xfff5f5f5),
+                                      padding: EdgeInsets.only(bottom: 10),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: numCard(logs['foreignStatistics']['curedIncr'],
+                                                logs['foreignStatistics']['curedCount'], '累计治愈'),
+                                          ),
+                                          Container(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            child: numCard(logs['foreignStatistics']['deadIncr'],
+                                                logs['foreignStatistics']['deadCount'], '当前死亡'),
+                                          ),
+                                        ],
                                       ),
-                                      Container(
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        child: Image.network('${item['imgUrl']}'),
-                                      )
-                                    ],
-                                  );
-                                },
-                              ).toList(),
+                                    ),
+                                    Column(
+                                      children: logs['foreignTrendChart'].map<Widget>(
+                                        (item) {
+                                          return Column(
+                                            children: <Widget>[
+                                              Container(
+                                                padding: EdgeInsets.symmetric(vertical: 10),
+                                                child: Text('${item['title']}'),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(bottom: 15),
+                                                child: Image.network('${item['imgUrl']}'),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      ).toList(),
+                                    ),
+                                    Column(
+                                      children: logs['importantForeignTrendChart'].map<Widget>(
+                                        (item) {
+                                          return Column(
+                                            children: <Widget>[
+                                              Container(
+                                                padding: EdgeInsets.symmetric(vertical: 10),
+                                                child: Text('${item['title']}'),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(bottom: 15),
+                                                child: Image.network('${item['imgUrl']}'),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      ).toList(),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),

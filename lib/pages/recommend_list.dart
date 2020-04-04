@@ -101,7 +101,7 @@ class _RecommendListState extends State<RecommendList> with AutomaticKeepAliveCl
   @override
   Widget build(BuildContext context) {
     super.build(context);
-//    double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - 56 * 2;
     return Scaffold(
       key: _scaffoldKey,
@@ -176,15 +176,33 @@ class _RecommendListState extends State<RecommendList> with AutomaticKeepAliveCl
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      padding: EdgeInsets.symmetric(vertical: 10),
-                                      child: Text(
-                                        '${item['title']}',
-                                        style: TextStyle(
-                                          fontSize: FontSize.title,
-                                        ),
+                                      padding: EdgeInsets.only(top: 10),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Text(
+                                              '${item['title']}',
+                                              style: TextStyle(
+                                                fontSize: FontSize.title,
+                                              ),
+                                            ),
+                                          ),
+                                          item['imgUrl'] == '' || item['imgUrl'] == null
+                                              ? Container()
+                                              : Container(
+                                                  width: width * 0.3,
+                                                  margin: EdgeInsets.only(
+                                                    left: 10,
+                                                  ),
+                                                  child: Image.network(
+                                                    '${item['imgUrl']}',
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                )
+                                        ],
                                       ),
                                     ),
-                                    Image.network('${item['imgUrl']}'),
                                     Container(
                                       padding: EdgeInsets.symmetric(vertical: 10),
                                       child: Row(

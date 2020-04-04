@@ -131,77 +131,89 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     : Container(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: logs.map<Widget>((item) {
-                            return GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                Navigator.push(
-                                  _context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NewDetail(props: item,index: 'sourceUrl',),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(bottom: 16),
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 6),
+                              alignment: Alignment.centerRight,
+                              child: Text('更新于：${DateTime.now().toString().substring(0, 19)}'),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: logs.map<Widget>((item) {
+                                return GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    Navigator.push(
+                                      _context,
+                                      MaterialPageRoute(
+                                        builder: (context) => NewDetail(
+                                          props: item,
+                                          index: 'sourceUrl',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: 16),
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
 //                                border: Border.all(
 //                                  color: Color(0xffdddddd),
 //                                  width: 0.5,
 //                                ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(2),
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      padding: EdgeInsets.symmetric(vertical: 10),
-                                      child: Text(
-                                        '${item['title']}',
-                                        style: TextStyle(
-                                          fontSize: FontSize.title,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(2),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.symmetric(vertical: 10),
+                                          child: Text(
+                                            '${item['title']}',
+                                            style: TextStyle(
+                                              fontSize: FontSize.title,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                    Text(
-                                      '${item['summary']}',
-                                      style: TextStyle(
-                                        fontSize: FontSize.content,
-                                        color: CColors.gray,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(vertical: 10),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(
-                                            '时间：${item['pubDateStr']}',
-                                            style: TextStyle(
-                                              fontSize: FontSize.content,
-                                              color: CColors.gray,
-                                            ),
+                                        Text(
+                                          '${item['summary']}',
+                                          style: TextStyle(
+                                            fontSize: FontSize.content,
+                                            color: CColors.gray,
                                           ),
-                                          Text(
-                                            '来源：${item['infoSource']}',
-                                            style: TextStyle(
-                                              fontSize: FontSize.content,
-                                              color: CColors.gray,
-                                            ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(vertical: 10),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(
+                                                '时间：${item['pubDateStr']}',
+                                                style: TextStyle(
+                                                  fontSize: FontSize.content,
+                                                  color: CColors.gray,
+                                                ),
+                                              ),
+                                              Text(
+                                                '来源：${item['infoSource']}',
+                                                style: TextStyle(
+                                                  fontSize: FontSize.content,
+                                                  color: CColors.gray,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          }).toList(),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         ),
                       ),
           ],
