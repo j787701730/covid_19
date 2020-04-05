@@ -25,7 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: 3.0.9
   fluttertoast: 4.0.1
-  flutter_webview_plugin: 0.3.10+2
+  webview_flutter: 0.3.19+9
   # 下拉刷新上拉加载
   pull_to_refresh: 1.5.7
   cached_network_image: 2.0.0
