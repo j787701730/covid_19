@@ -77,23 +77,6 @@ class _GuoWaiDataState extends State<GuoWaiData> {
     );
   }
 
-  numText(num) {
-    Color color;
-    if (num == 0) {
-      color = Colors.grey;
-    } else if (num > 0) {
-      color = Colors.red;
-    } else {
-      color = Colors.green;
-    }
-    return Text(
-      '${num >= 0 ? '+$num' : num}',
-      style: TextStyle(
-        color: color,
-      ),
-    );
-  }
-
   numCard(incr, count, name) {
     Color color;
     if (name == '累计治愈') {
@@ -206,7 +189,7 @@ class _GuoWaiDataState extends State<GuoWaiData> {
                                           ),
                                         ),
                                         Text(
-                                          '更新时间：${item['modifyTime'] == null ? '无' : DateTime.fromMillisecondsSinceEpoch(item['modifyTime']).toString().substring(0, 19)}',
+                                          '${item['modifyTime'] == null ? '无' : DateTime.fromMillisecondsSinceEpoch(item['modifyTime']).toString().substring(0, 19)}',
                                           style: TextStyle(
                                             fontSize: FontSize.title,
                                             color: Colors.grey,
@@ -222,14 +205,22 @@ class _GuoWaiDataState extends State<GuoWaiData> {
                                       children: <Widget>[
                                         Expanded(
                                           child: numCard(
-                                              item['incrVo']['currentConfirmedIncr'], item['confirmedCount'], '累计确诊'),
+                                              item['incrVo'] == null || item['incrVo'].isEmpty
+                                                  ? 0
+                                                  : item['incrVo']['currentConfirmedIncr'],
+                                              item['confirmedCount'],
+                                              '累计确诊'),
                                         ),
                                         Container(
                                           width: 10,
                                         ),
                                         Expanded(
                                           child: numCard(
-                                              item['incrVo']['confirmedIncr'], item['currentConfirmedCount'], '当前确诊'),
+                                              item['incrVo'] == null || item['incrVo'].isEmpty
+                                                  ? 0
+                                                  : item['incrVo']['confirmedIncr'],
+                                              item['currentConfirmedCount'],
+                                              '当前确诊'),
                                         ),
                                       ],
                                     ),
@@ -239,13 +230,23 @@ class _GuoWaiDataState extends State<GuoWaiData> {
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
-                                          child: numCard(item['incrVo']['curedIncr'], item['curedCount'], '累计治愈'),
+                                          child: numCard(
+                                              item['incrVo'] == null || item['incrVo'].isEmpty
+                                                  ? 0
+                                                  : item['incrVo']['curedIncr'],
+                                              item['curedCount'],
+                                              '累计治愈'),
                                         ),
                                         Container(
                                           width: 10,
                                         ),
                                         Expanded(
-                                          child: numCard(item['incrVo']['deadIncr'], item['deadCount'], '累计死亡'),
+                                          child: numCard(
+                                              item['incrVo'] == null || item['incrVo'].isEmpty
+                                                  ? 0
+                                                  : item['incrVo']['deadIncr'],
+                                              item['deadCount'],
+                                              '累计死亡'),
                                         ),
                                       ],
                                     ),

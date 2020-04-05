@@ -81,23 +81,6 @@ class _RecommendListState extends State<RecommendList> with AutomaticKeepAliveCl
     );
   }
 
-  numText(num) {
-    Color color;
-    if (num == 0) {
-      color = Colors.grey;
-    } else if (num > 0) {
-      color = Colors.red;
-    } else {
-      color = Colors.green;
-    }
-    return Text(
-      '${num >= 0 ? '+$num' : num}',
-      style: TextStyle(
-        color: color,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);

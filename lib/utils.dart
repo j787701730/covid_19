@@ -1,5 +1,7 @@
+import 'package:covid19/style.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart';
 
 final baseUrl = 'http://49.232.173.220:3001/';
 
@@ -48,4 +50,24 @@ ajaxSimple(String url, data, Function fun, {Function netError}) async {
 
     // Toast.show('$e', _context, duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
   }
+}
+
+numText(num) {
+  Color color;
+  if (!(num is int)) {
+    num = 0;
+  }
+  if (num == 0) {
+    color = Colors.grey;
+  } else if (num > 0) {
+    color = Colors.red;
+  } else {
+    color = Colors.green;
+  }
+  return Text(
+    '${num >= 0 ? '+$num' : num}',
+    style: TextStyle(
+      color: color,
+    ),
+  );
 }

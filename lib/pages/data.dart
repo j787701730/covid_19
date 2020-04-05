@@ -81,23 +81,6 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  numText(num) {
-    Color color;
-    if (num == 0) {
-      color = Colors.grey;
-    } else if (num > 0) {
-      color = Colors.red;
-    } else {
-      color = Colors.green;
-    }
-    return Text(
-      '${num >= 0 ? '+$num' : num}',
-      style: TextStyle(
-        color: color,
-      ),
-    );
-  }
-
   numCard(incr, count, name) {
     Color color;
     if (name == '累计治愈') {
