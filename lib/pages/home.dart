@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:covid19/pages/new_detail.dart';
 import 'package:covid19/primary_button.dart';
 import 'package:covid19/style.dart';

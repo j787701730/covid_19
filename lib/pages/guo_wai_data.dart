@@ -14,7 +14,6 @@ class GuoWaiData extends StatefulWidget {
 
 class _GuoWaiDataState extends State<GuoWaiData> {
   List logs = [];
-  BuildContext _context;
   ScrollController _controller;
   bool loading = true;
   RefreshController _refreshController = RefreshController(initialRefresh: false);
@@ -42,7 +41,6 @@ class _GuoWaiDataState extends State<GuoWaiData> {
   void initState() {
     super.initState();
     _controller = ScrollController();
-    _context = context;
     Timer(Duration(milliseconds: 200), () {
       getData();
     });

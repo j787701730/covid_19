@@ -17,7 +17,6 @@ class _RumorListState extends State<RumorList> with AutomaticKeepAliveClientMixi
   bool get wantKeepAlive => true;
 
   List logs = [];
-  BuildContext _context;
   ScrollController _controller;
   bool loading = true;
   RefreshController _refreshController = RefreshController(initialRefresh: false);
@@ -45,7 +44,6 @@ class _RumorListState extends State<RumorList> with AutomaticKeepAliveClientMixi
   void initState() {
     super.initState();
     _controller = ScrollController();
-    _context = context;
     Timer(Duration(milliseconds: 200), () {
       getData();
     });
