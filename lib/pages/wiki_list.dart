@@ -58,7 +58,7 @@ class _WikiListState extends State<WikiList> with AutomaticKeepAliveClientMixin 
     _controller.dispose();
   }
 
-  getData({isRefresh: false}) async {
+  getData({isRefresh: false}) {
     ajaxSimple('data/getWikiList', {}, (res) {
       if (mounted) {
         setState(() {

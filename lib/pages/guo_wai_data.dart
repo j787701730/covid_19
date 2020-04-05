@@ -52,7 +52,7 @@ class _GuoWaiDataState extends State<GuoWaiData> {
     _controller.dispose();
   }
 
-  getData({isRefresh: false}) async {
+  getData({isRefresh: false}) {
     ajaxSimple('data/getListByCountryTypeService2true', {}, (res) {
       if (mounted) {
         setState(() {

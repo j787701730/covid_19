@@ -58,7 +58,7 @@ class _RecommendListState extends State<RecommendList> with AutomaticKeepAliveCl
     _controller.dispose();
   }
 
-  getData({isRefresh: false}) async {
+  getData({isRefresh: false}) {
     ajaxSimple('data/getIndexRecommendList', {}, (res) {
       if (mounted) {
         setState(() {

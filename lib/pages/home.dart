@@ -57,7 +57,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     _controller.dispose();
   }
 
-  getData({isRefresh: false}) async {
+  getData({isRefresh: false}) {
     ajaxSimple('data/getTimelineService', {}, (res) {
       if (mounted) {
         setState(() {

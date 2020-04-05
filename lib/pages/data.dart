@@ -58,7 +58,7 @@ class _DataState extends State<Data> with AutomaticKeepAliveClientMixin {
     _controller.dispose();
   }
 
-  getData({isRefresh: false}) async {
+  getData({isRefresh: false}) {
     ajaxSimple('data/getStatisticsService', {}, (res) {
       if (mounted) {
         setState(() {

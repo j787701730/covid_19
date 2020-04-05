@@ -55,7 +55,7 @@ class _RumorListState extends State<RumorList> with AutomaticKeepAliveClientMixi
     _controller.dispose();
   }
 
-  getData({isRefresh: false}) async {
+  getData({isRefresh: false}) {
     ajaxSimple('data/getIndexRumorList', {}, (res) {
       if (mounted) {
         setState(() {
